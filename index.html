@@ -1,34 +1,176 @@
-<!DOCTYPE html><html lang="en-us"><head>
-<script src="gameloader-helper.js"></script>
+<!DOCTYPE html><html lang="en-us">
+<head>
 <meta charset="utf-8">
-<link rel="icon" type="image/jpeg" href="favicon.jpeg">
-<script src=""></script>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Ragdoll Archers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Ragdoll Archers</title><link rel="icon" type="image/jpeg" href="favicon.jpeg">
+<link rel="stylesheet" href="styyyle.css"><script src="gameloader-helper.js"></script><style>
+/* ==============================
+   LANDSCAPE RECOMMENDATION
+============================== */
 
-<link rel="stylesheet" href="styyyle.css">
-<body>
-  
+#landscape-popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(0,0,0,.88);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+#landscape-popup.show {
+  display: flex;
+}
+
+.landscape-box {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 30px 22px;
+  background: #202124;
+  color: #fff;
+  border-radius: 16px;
+  text-align: center;
+  box-sizing: border-box;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 15px 50px rgba(0,0,0,.5);
+}
+
+.landscape-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #383838;
+  color: #fff;
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.landscape-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.landscape-box h2 {
+  font-size: 21px;
+  margin: 0 0 12px;
+  font-weight: 700;
+}
+
+.landscape-box p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #d1d1d1;
+  margin: 0 0 20px;
+}
+
+.landscape-button {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 9px;
+  background: #fff;
+  color: #111;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.landscape-button:active {
+  transform: scale(.98);
+}
+
+/* ==============================
+   UNITY MOBILE VIEW
+============================== */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+#unity-container {
+  width: 100%;
+  height: 100%;
+}
+
+#unity-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+  background: #000;
+}
+
+.unity-mobile {
+  width: 100%;
+  height: 100%;
+}
+
+@media (orientation: portrait) and (max-width: 900px) {
+  #unity-container.unity-mobile {
+    width: 100%;
+    height: 100%;
+  }
+}
+</style></head><body><div id="unity-container" class="unity-desktop">
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+</div><div id="loading-cover">
+  <div id="unity-loading-bar">
+    <div id="unity-logo">
+      <img src="logo.jpeg">
+    </div><div class="progress-spinner-container">
+  <div class="spinner-left">
+    <img src="spinner.png">
+  </div>
+
+  <div id="unity-progress-bar-empty">
+    <div id="unity-progress-bar-full"></div>
+  </div>
+
+  <div class="spinner-right">
+    <img src="spinner.png">
+  </div>
 </div>
-<div id="unity-container" class="unity-desktop">
-<canvas id="unity-canvas"></canvas>
-</div>
-<div id="loading-cover">
-<div id="unity-loading-bar">
-<div id="unity-logo"><img src="logo.jpeg"></div>
-<div class="progress-spinner-container">
-<div class="spinner-left"><img src="spinner.png"></div>
-<div id="unity-progress-bar-empty">
-<div id="unity-progress-bar-full"></div>
-</div>
-<div class="spinner-right"><img src="spinner.png"></div>
-</div>
-</div>
-</div>
-<script>
-    const buildUrl = "Build";
-    const loaderUrl = "v11121212.js";
+
+  </div>
+</div><!-- LANDSCAPE POPUP --><div id="landscape-popup">
+  <div class="landscape-box"><button class="landscape-close" id="landscape-close" aria-label="Close">
+  &times;
+</button>
+
+<div class="landscape-icon">📱↻</div>
+
+<h2>Play in Landscape Mode</h2>
+
+<p>
+  For the best gaming experience, please rotate your device
+  horizontally (landscape mode).
+  Enjoy smoother gameplay with a wider view!
+</p>
+
+<button class="landscape-button" id="landscape-ok">
+  Got It, Let's Play!
+</button>
+
+  </div>
+</div><script>
+const buildUrl = "Build";
+const loaderUrl = "v11121212.js";
+
 const config = {
   dataUrl: "6697b6deba8b617c67b69c55dcd07cb1.data.unityweb",
   frameworkUrl: "0be3c3ee7115b26e1ae28e643afdf1f2.js.unityweb",
@@ -36,42 +178,120 @@ const config = {
   streamingAssetsUrl: "StreamingAssets",
   companyName: "Ericetto",
   productName: "Ragdoll Archers",
-  productVersion: "0.1",
+  productVersion: "0.1"
 };
 
+const container = document.querySelector("#unity-container");
+const canvas = document.querySelector("#unity-canvas");
+const loadingCover = document.querySelector("#loading-cover");
+const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
+const progressBarFull = document.querySelector("#unity-progress-bar-full");
 
-    const container = document.querySelector("#unity-container");
-    const canvas = document.querySelector("#unity-canvas");
-    const loadingCover = document.querySelector("#loading-cover");
-    const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
-    const progressBarFull = document.querySelector("#unity-progress-bar-full");
+const landscapePopup = document.querySelector("#landscape-popup");
+const landscapeClose = document.querySelector("#landscape-close");
+const landscapeOK = document.querySelector("#landscape-ok");
 
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      container.className = "unity-mobile";
+let popupDismissed = false;
+
+/* ==============================
+   LANDSCAPE DETECTION
+============================== */
+
+function checkLandscape() {
+
+  const isMobile = window.matchMedia("(max-width: 900px)").matches;
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+
+  if (isMobile && isPortrait && !popupDismissed) {
+    landscapePopup.classList.add("show");
+  } else {
+    landscapePopup.classList.remove("show");
+  }
+}
+
+function closeLandscapePopup() {
+  popupDismissed = true;
+  landscapePopup.classList.remove("show");
+}
+
+landscapeClose.addEventListener("click", closeLandscapePopup);
+landscapeOK.addEventListener("click", closeLandscapePopup);
+
+window.addEventListener("orientationchange", checkLandscape);
+window.addEventListener("resize", checkLandscape);
+
+checkLandscape();
+
+/* ==============================
+   LANDSCAPE LOCK
+============================== */
+
+async function lockLandscape() {
+  try {
+    if (screen.orientation && screen.orientation.lock) {
+      await screen.orientation.lock("landscape");
     }
-    
-    loadingCover.style.display = "";
+  } catch (error) {
+    console.log("Landscape lock unavailable:", error);
+  }
+}
 
-    const unityLoader = document.createElement("script");
-    unityLoader.src = loaderUrl;
-    unityLoader.onload = () => {
-      createUnityInstance(canvas, config, (progress) => {
-        progressBarEmpty.style.display = "";
-        progressBarFull.style.width = `${100 * progress}%`;
-      }).then((unityInstance) => {
-        window.unityInstance = unityInstance;
-        loadingCover.style.display = "none";
-      }).catch((message) => {
-        alert(message);
-      });
-    };
-    document.body.appendChild(unityLoader);
+/* ==============================
+   UNITY FULLSCREEN
+============================== */
 
-    document.addEventListener("pointerdown", () => {
-      container.focus();
-      window.focus();
-      canvas.focus();
-    });
+if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+  container.className = "unity-mobile";
+}
 
-  </script>
-</body></html>
+loadingCover.style.display = "";
+
+const unityLoader = document.createElement("script");
+unityLoader.src = loaderUrl;
+
+unityLoader.onload = () => {
+
+  createUnityInstance(canvas, config, (progress) => {
+
+    progressBarEmpty.style.display = "";
+    progressBarFull.style.width = `${100 * progress}%`;
+
+  }).then((unityInstance) => {
+
+    window.unityInstance = unityInstance;
+    loadingCover.style.display = "none";
+
+  }).catch((message) => {
+
+    alert(message);
+
+  });
+};
+
+document.body.appendChild(unityLoader);
+
+/* ==============================
+   USER INTERACTION
+============================== */
+
+document.addEventListener("pointerdown", () => {
+  container.focus();
+  window.focus();
+  canvas.focus();
+});
+
+/* ==============================
+   FULLSCREEN + LANDSCAPE
+============================== */
+
+document.addEventListener("fullscreenchange", () => {
+
+  if (document.fullscreenElement) {
+    lockLandscape();
+  }
+
+  checkLandscape();
+
+});
+</script></body>
+</html>
