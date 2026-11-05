@@ -1,401 +1,523 @@
-<!DOCTYPE html><html lang="en-us">
+<!DOCTYPE html>
+<html lang="en-us">
 <head>
+
 <meta charset="utf-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+
 <meta name="theme-color" content="#000000">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Ragdoll Archers</title><link rel="icon" type="image/webp" href="favicon.webp">
-<link rel="stylesheet" href="styyyle.css"><script src="gameloader-helper.js"></script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title>Ragdoll Archers</title>
+
+<link rel="icon" type="image/webp" href="favicon.webp">
+
+<link rel="stylesheet" href="styyyle.css">
+
+<script src="gameloader-helper.js"></script>
+
 <style>
+
+/* =================================
+   GLOBAL BACKGROUND
+================================= */
+
 html,
 body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    background: #000 !important;
     overflow: hidden;
+    background: #000 !important;
 }
 
-#unity-container,
-#unity-container *,
-#unity-loading-bar,
-#unity-canvas {
-    background-color: #000;
+/* =================================
+   APP STAGE
+================================= */
+
+#app-stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
+}
+
+/* =================================
+   UNITY CONTAINER
+================================= */
+
+#unity-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #000 !important;
 }
 
 #unity-canvas {
     display: block;
-}
-</style>
-
-<script>
-(function() {
-    function lockLandscape() {
-        if (screen.orientation &&
-            screen.orientation.lock) {
-            screen.orientation.lock('landscape')
-                .catch(function() {});
-        }
-    }
-
-    document.addEventListener('fullscreenchange', function() {
-        if (document.fullscreenElement) {
-            lockLandscape();
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        lockLandscape();
-    });
-})();
-</script>
-<style>
-#landscape-popup {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 999999;
-  background: rgba(0,0,0,.88);
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+    width: 100% !important;
+    height: 100% !important;
+    outline: none;
+    background: #000 !important;
 }
 
-#landscape-popup.show {
-  display: flex;
-}
+/* =================================
+   LOADING COVER
+================================= */
 
-.landscape-box {
-  position: relative;
-  width: 100%;
-  max-width: 360px;
-  padding: 30px 22px;
-  background: #202124;
-  color: #fff;
-  border-radius: 16px;
-  text-align: center;
-  box-sizing: border-box;
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 15px 50px rgba(0,0,0,.5);
-}
-
-.landscape-close {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: #383838;
-  color: #fff;
-  font-size: 23px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.landscape-icon {
-  font-size: 14px;
-  text-transform:uppercase;
-  margin-bottom: 30px;
-}
-
-.landscape-box h2 {
-  font-size: 21px;
-  margin: 0 0 12px;
-  font-weight: 700;
-}
-
-.landscape-box p {
-  font-size: 15px;
-  line-height: 1.7;
-  color: #d1d1d1;
-  margin: 0 0 20px;
-}
-
-.landscape-button {
-  display: block;
-  width: 100%;
-  padding: 13px;
-  border: none;
-  border-radius: 9px;
-  background: #fff;
-  color: #111;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.landscape-button:active {
-  transform: scale(.98);
-}
-
-/* ==============================
-   UNITY MOBILE VIEW
-============================== */
-
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #000;
-}
-
-#unity-container {
-  width: 100%;
-  height: 100%;
-}
-
-#unity-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  outline: none;
-  background: #000;
-}
-
-.unity-mobile {
-  width: 100%;
-  height: 100%;
-}
-
-@media (orientation: portrait) and (max-width: 900px) {
-  #unity-container.unity-mobile {
+#loading-cover {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-  }
+    z-index: 10;
+    background: #000 !important;
 }
-</style></head><body><div id="unity-container" class="unity-desktop">
-  <canvas id="unity-canvas" tabindex="-1"></canvas>
-</div><div id="loading-cover">
-  <div id="unity-loading-bar">
-    <div id="unity-logo">
-      <img alt="Ragdoll Archers appu.uk" title="Ragdoll Archers appu.uk" loading="lazy" style="margin-bottom:30px;" src="appu-ragdoll-archers.png">
-    </div><div class="progress-spinner-container">
-  <div class="spinner-left">
-    <img alt="Ragdoll Archers Spinner" src="1793852318882.png">
-  </div>
 
-  <div id="unity-progress-bar-empty">
-    <div id="unity-progress-bar-full"></div>
-  </div>
+/* =================================
+   LOADING ELEMENTS
+================================= */
 
-  <div class="spinner-right">
-    <img alt="Ragdoll Archers Spinner" src="1793852318882.png">
-  </div>
+#unity-loading-bar {
+    background: #000 !important;
+}
+
+#unity-logo {
+    background: transparent !important;
+}
+
+#unity-logo img {
+    max-width: 100%;
+    height: auto;
+}
+
+.progress-spinner-container {
+    background: transparent !important;
+}
+
+.spinner-left,
+.spinner-right {
+    background: transparent !important;
+}
+
+/* =================================
+   MOBILE LANDSCAPE ROTATION
+================================= */
+
+@media screen and (orientation: portrait) and (max-width: 900px) {
+
+    #app-stage {
+        width: 100vh;
+        height: 100vw;
+
+        top: 0;
+        left: 100vw;
+
+        transform: rotate(90deg);
+        transform-origin: top left;
+
+        overflow: hidden;
+    }
+
+}
+
+/* =================================
+   DYNAMIC VIEWPORT SUPPORT
+================================= */
+
+@supports (height: 100dvh) {
+
+    @media screen and (orientation: portrait) and (max-width: 900px) {
+
+        #app-stage {
+            width: 100dvh;
+            height: 100vw;
+        }
+
+    }
+
+    @media screen and (orientation: landscape) and (max-width: 900px) {
+
+        #app-stage {
+            width: 100vw;
+            height: 100dvh;
+        }
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =================================
+     APP STAGE
+================================= -->
+
+<div id="app-stage">
+
+    <!-- UNITY CANVAS -->
+
+    <div id="unity-container" class="unity-desktop">
+
+        <canvas id="unity-canvas" tabindex="-1"></canvas>
+
+    </div>
+
+    <!-- UNITY LOADING -->
+
+    <div id="loading-cover">
+
+        <div id="unity-loading-bar">
+
+            <div id="unity-logo">
+
+                <img
+                    alt="Ragdoll Archers appu.uk"
+                    title="Ragdoll Archers appu.uk"
+                    loading="eager"
+                    style="margin-bottom:30px;"
+                    src="appu-ragdoll-archers.png"
+                >
+
+            </div>
+
+            <div class="progress-spinner-container">
+
+                <div class="spinner-left">
+
+                    <img
+                        alt="Ragdoll Archers Spinner"
+                        src="1793852318882.png"
+                    >
+
+                </div>
+
+                <div id="unity-progress-bar-empty">
+
+                    <div id="unity-progress-bar-full"></div>
+
+                </div>
+
+                <div class="spinner-right">
+
+                    <img
+                        alt="Ragdoll Archers Spinner"
+                        src="1793852318882.png"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-  </div>
-</div><!-- LANDSCAPE POPUP --><div id="landscape-popup">
-  <div class="landscape-box"><button class="landscape-close" id="landscape-close" aria-label="Close">
-  &times;
-</button>
+<!-- =================================
+     UNITY INITIALIZATION
+================================= -->
 
-<div class="landscape-icon">↻ Rotate to Landscape Mode</div>
+<script>
 
-<h2>Play in Landscape Mode</h2>
-
-<p>
-  For the best gaming experience, please rotate your device
-  horizontally (landscape mode).
-  Enjoy smoother gameplay with a wider view!
-</p>
-
-<button class="landscape-button" id="landscape-ok">
-  Got It, Let's Play!
-</button>
-
-  </div>
-</div><script>
 const buildUrl = "Build";
+
 const loaderUrl = "v11121212.js";
 
 const config = {
-  dataUrl: "6697b6deba8b617c67b69c55dcd07cb1.data.unityweb",
-  frameworkUrl: "0be3c3ee7115b26e1ae28e643afdf1f2.js.unityweb",
-  codeUrl: "b3397c29f6878557c1c614cbf9e196ea.wasm.unityweb",
-  streamingAssetsUrl: "StreamingAssets",
-  companyName: "Ericetto",
-  productName: "Ragdoll Archers",
-  productVersion: "0.1"
+
+    dataUrl: "6697b6deba8b617c67b69c55dcd07cb1.data.unityweb",
+
+    frameworkUrl: "0be3c3ee7115b26e1ae28e643afdf1f2.js.unityweb",
+
+    codeUrl: "b3397c29f6878557c1c614cbf9e196ea.wasm.unityweb",
+
+    streamingAssetsUrl: "StreamingAssets",
+
+    companyName: "Ericetto",
+
+    productName: "Ragdoll Archers",
+
+    productVersion: "0.1"
+
 };
 
+const stage = document.querySelector("#app-stage");
+
 const container = document.querySelector("#unity-container");
+
 const canvas = document.querySelector("#unity-canvas");
+
 const loadingCover = document.querySelector("#loading-cover");
+
 const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
+
 const progressBarFull = document.querySelector("#unity-progress-bar-full");
 
-const landscapePopup = document.querySelector("#landscape-popup");
-const landscapeClose = document.querySelector("#landscape-close");
-const landscapeOK = document.querySelector("#landscape-ok");
-
-let popupDismissed = false;
-
-/* ==============================
-   LANDSCAPE DETECTION
-============================== */
-
-function checkLandscape() {
-
-  const isMobile = window.matchMedia("(max-width: 900px)").matches;
-  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-
-  if (isMobile && isPortrait && !popupDismissed) {
-    landscapePopup.classList.add("show");
-  } else {
-    landscapePopup.classList.remove("show");
-  }
-}
-
-function closeLandscapePopup() {
-  popupDismissed = true;
-  landscapePopup.classList.remove("show");
-}
-
-landscapeClose.addEventListener("click", closeLandscapePopup);
-landscapeOK.addEventListener("click", closeLandscapePopup);
-
-window.addEventListener("orientationchange", checkLandscape);
-window.addEventListener("resize", checkLandscape);
-
-checkLandscape();
-
-/* ==============================
-   LANDSCAPE LOCK
-============================== */
-
-async function lockLandscape() {
-  try {
-    if (screen.orientation && screen.orientation.lock) {
-      await screen.orientation.lock("landscape");
-    }
-  } catch (error) {
-    console.log("Landscape lock unavailable:", error);
-  }
-}
-
-/* ==============================
-   UNITY FULLSCREEN
-============================== */
+/* =================================
+   MOBILE DETECTION
+================================= */
 
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-  container.className = "unity-mobile";
+
+    container.className = "unity-mobile";
+
 }
+
+/* =================================
+   LANDSCAPE LOCK
+================================= */
+
+let landscapeRequested = false;
+
+async function requestLandscape() {
+
+    if (landscapeRequested) return;
+
+    landscapeRequested = true;
+
+    try {
+
+        if (!document.fullscreenElement &&
+            document.documentElement.requestFullscreen) {
+
+            await document.documentElement.requestFullscreen();
+
+        }
+
+    } catch (error) {
+
+        console.log("Fullscreen unavailable:", error);
+
+    }
+
+    try {
+
+        if (screen.orientation &&
+            screen.orientation.lock) {
+
+            await screen.orientation.lock("landscape");
+
+        }
+
+    } catch (error) {
+
+        console.log("Landscape lock unavailable:", error);
+
+    }
+
+}
+
+/* =================================
+   USER INTERACTION
+================================= */
+
+document.addEventListener("pointerdown", function() {
+
+    container.focus();
+
+    window.focus();
+
+    canvas.focus();
+
+    requestLandscape();
+
+}, { once: true });
+
+/* =================================
+   ORIENTATION CHANGE
+================================= */
+
+window.addEventListener("orientationchange", function() {
+
+    window.dispatchEvent(new Event("resize"));
+
+});
+
+window.addEventListener("resize", function() {
+
+    if (window.unityInstance) {
+
+        window.unityInstance.SendMessage(
+            "WebGLInput",
+            "OnResize",
+            ""
+        );
+
+    }
+
+});
+
+/* =================================
+   UNITY LOADER
+================================= */
 
 loadingCover.style.display = "";
 
 const unityLoader = document.createElement("script");
+
 unityLoader.src = loaderUrl;
 
-unityLoader.onload = () => {
+unityLoader.onload = function() {
 
-  createUnityInstance(canvas, config, (progress) => {
+    createUnityInstance(
 
-    progressBarEmpty.style.display = "";
-    progressBarFull.style.width = `${100 * progress}%`;
+        canvas,
 
-  }).then((unityInstance) => {
+        config,
 
-    window.unityInstance = unityInstance;
-    loadingCover.style.display = "none";
+        function(progress) {
 
-  }).catch((message) => {
+            progressBarEmpty.style.display = "";
 
-    alert(message);
+            progressBarFull.style.width =
+                (100 * progress) + "%";
 
-  });
+        }
+
+    ).then(function(unityInstance) {
+
+        window.unityInstance = unityInstance;
+
+        loadingCover.style.display = "none";
+
+    }).catch(function(message) {
+
+        alert(message);
+
+    });
+
+};
+
+unityLoader.onerror = function() {
+
+    alert("Unity loader failed to load.");
+
 };
 
 document.body.appendChild(unityLoader);
 
-/* ==============================
-   USER INTERACTION
-============================== */
+/* =================================
+   FULLSCREEN CHANGE
+================================= */
 
-document.addEventListener("pointerdown", () => {
-  container.focus();
-  window.focus();
-  canvas.focus();
-});
+document.addEventListener("fullscreenchange", function() {
 
-/* ==============================
-   FULLSCREEN + LANDSCAPE
-============================== */
-
-document.addEventListener("fullscreenchange", () => {
-
-  if (document.fullscreenElement) {
-    lockLandscape();
-  }
-
-  checkLandscape();
+    window.dispatchEvent(new Event("resize"));
 
 });
+
 </script>
+
+<!-- =================================
+     IMAGE RENDERER
+================================= -->
+
 <script>
+
 //<![CDATA[
-(function () {
-  'use strict';
 
-  const imageTargets = [
-    {
-      selector: '#unity-logo img',
-      src: 'logo.jpeg'
-    },
-    {
-      selector: '.spinner-left img',
-      src: '1793852318882.png'
-    },
-    {
-      selector: '.spinner-right img',
-      src: '1793852318882.png'
+(function() {
+
+    'use strict';
+
+    const imageTargets = [
+
+        {
+            selector: '#unity-logo img',
+            src: 'logo.jpeg'
+        },
+
+        {
+            selector: '.spinner-left img',
+            src: '1793852318882.png'
+        },
+
+        {
+            selector: '.spinner-right img',
+            src: '1793852318882.png'
+        }
+
+    ];
+
+    function renderImage(element, src) {
+
+        if (!element) return;
+
+        const image = new Image();
+
+        image.onload = function() {
+
+            element.src = src;
+
+            element.style.display = 'block';
+
+            element.classList.add('image-rendered');
+
+        };
+
+        image.onerror = function() {
+
+            console.error('Image failed to load:', src);
+
+        };
+
+        image.src = src;
+
     }
-  ];
 
-  function renderImage(element, src) {
-    if (!element) return;
+    function initializeImages() {
 
-    const image = new Image();
+        imageTargets.forEach(function(item) {
 
-    image.onload = function () {
-      element.src = src;
-      element.style.display = 'block';
-      element.classList.add('image-rendered');
-    };
+            const element = document.querySelector(item.selector);
 
-    image.onerror = function () {
-      console.error('Image failed to load:', src);
-    };
+            if (element) {
 
-    image.src = src;
-  }
+                element.loading = 'eager';
 
-  function initializeImages() {
-    imageTargets.forEach(function (item) {
-      const element = document.querySelector(item.selector);
+                element.decoding = 'async';
 
-      if (element) {
-        element.loading = 'eager';
-        element.decoding = 'async';
+                renderImage(element, item.src);
 
-        renderImage(element, item.src);
-      }
-    });
-  }
+            }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeImages);
-  } else {
-    initializeImages();
-  }
+        });
+
+    }
+
+    if (document.readyState === 'loading') {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            initializeImages
+        );
+
+    } else {
+
+        initializeImages();
+
+    }
 
 })();
+
 //]]>
+
 </script>
+
 </body>
 </html>
