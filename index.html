@@ -1,13 +1,55 @@
 <!DOCTYPE html><html lang="en-us">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Ragdoll Archers</title><link rel="icon" type="image/webp" href="favicon.webp">
-<link rel="stylesheet" href="styyyle.css"><script src="gameloader-helper.js"></script><style>
-/* ==============================
-   LANDSCAPE RECOMMENDATION
-============================== */
+<link rel="stylesheet" href="styyyle.css"><script src="gameloader-helper.js"></script>
+<style>
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #000 !important;
+    overflow: hidden;
+}
 
+#unity-container,
+#unity-container *,
+#unity-loading-bar,
+#unity-canvas {
+    background-color: #000;
+}
+
+#unity-canvas {
+    display: block;
+}
+</style>
+
+<script>
+(function() {
+    function lockLandscape() {
+        if (screen.orientation &&
+            screen.orientation.lock) {
+            screen.orientation.lock('landscape')
+                .catch(function() {});
+        }
+    }
+
+    document.addEventListener('fullscreenchange', function() {
+        if (document.fullscreenElement) {
+            lockLandscape();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        lockLandscape();
+    });
+})();
+</script>
+<style>
 #landscape-popup {
   display: none;
   position: fixed;
