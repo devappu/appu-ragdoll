@@ -1,0 +1,19 @@
+{
+  "name": "Ragdoll Archers",
+  "short_name": "Ragdoll Archers",
+  "description": "Play Ragdoll Archers, upgrade your arrow, armor, arrow slots, and many more.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "https://www.ragdoll.appu.uk/favicon.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "maskable"
+    }
+  ]
+}
