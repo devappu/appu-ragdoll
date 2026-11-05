@@ -416,7 +416,7 @@ if ("serviceWorker" in navigator) {
  <!-- APPU RAGDOLL BGM -->
 <audio
     id="appuRagdollBGM"
-    src="ragdoll.mp3"
+    src="https://www.ragdoll.appu.uk/ragdoll.mp3"
     preload="auto"
     loop
 ></audio>
@@ -425,34 +425,31 @@ if ("serviceWorker" in navigator) {
 (function() {
     const bgm = document.getElementById('appuRagdollBGM');
 
-    let started = false;
+    if (!bgm) return;
+
+    bgm.volume = 0.75;
 
     function startBGM() {
-        if (started) return;
+        if (!bgm.paused) return;
 
-        started = true;
-
-        bgm.volume = 0.75;
-
-        const playPromise = bgm.play();
-
-        if (playPromise !== undefined) {
-            playPromise.catch(function() {
-                started = false;
-            });
-        }
+        bgm.play().catch(function(error) {
+            console.log('APPU BGM:', error);
+        });
     }
 
     document.addEventListener('pointerdown', startBGM, {
-        once: true,
         passive: true
     });
 
-    document.addEventListener('keydown', startBGM, {
-        once: true
+    document.addEventListener('touchstart', startBGM, {
+        passive: true
     });
 
+    document.addEventListener('click', startBGM);
+
+    document.addEventListener('keydown', startBGM);
+
 })();
-</script>
+ </script>
 </body>  
 </html>
