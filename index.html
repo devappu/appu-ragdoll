@@ -152,7 +152,7 @@ html, body {
   &times;
 </button>
 
-<div class="landscape-icon">📱↻</div>
+<div class="landscape-icon">↻ Rotate to Landscape Mode</div>
 
 <h2>Play in Landscape Mode</h2>
 
@@ -293,5 +293,66 @@ document.addEventListener("fullscreenchange", () => {
   checkLandscape();
 
 });
-</script></body>
+</script>
+<script>
+//<![CDATA[
+(function () {
+  'use strict';
+
+  const imageTargets = [
+    {
+      selector: '#unity-logo img',
+      src: 'logo.jpeg'
+    },
+    {
+      selector: '.spinner-left img',
+      src: '1793852318882.png'
+    },
+    {
+      selector: '.spinner-right img',
+      src: '1793852318882.png'
+    }
+  ];
+
+  function renderImage(element, src) {
+    if (!element) return;
+
+    const image = new Image();
+
+    image.onload = function () {
+      element.src = src;
+      element.style.display = 'block';
+      element.classList.add('image-rendered');
+    };
+
+    image.onerror = function () {
+      console.error('Image failed to load:', src);
+    };
+
+    image.src = src;
+  }
+
+  function initializeImages() {
+    imageTargets.forEach(function (item) {
+      const element = document.querySelector(item.selector);
+
+      if (element) {
+        element.loading = 'eager';
+        element.decoding = 'async';
+
+        renderImage(element, item.src);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeImages);
+  } else {
+    initializeImages();
+  }
+
+})();
+//]]>
+</script>
+</body>
 </html>
