@@ -413,5 +413,46 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
+ <!-- APPU RAGDOLL BGM -->
+<audio
+    id="appuRagdollBGM"
+    src="ragdoll.mp3"
+    preload="auto"
+    loop
+></audio>
+
+<script>
+(function() {
+    const bgm = document.getElementById('appuRagdollBGM');
+
+    let started = false;
+
+    function startBGM() {
+        if (started) return;
+
+        started = true;
+
+        bgm.volume = 0.75;
+
+        const playPromise = bgm.play();
+
+        if (playPromise !== undefined) {
+            playPromise.catch(function() {
+                started = false;
+            });
+        }
+    }
+
+    document.addEventListener('pointerdown', startBGM, {
+        once: true,
+        passive: true
+    });
+
+    document.addEventListener('keydown', startBGM, {
+        once: true
+    });
+
+})();
+</script>
 </body>  
 </html>
