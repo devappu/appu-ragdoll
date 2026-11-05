@@ -99,9 +99,3 @@ body{
 .light #unity-progress-bar-full{
   background: #000
 }
-@media screen and (max-width: 480px) {
-#unity-logo img{
-  max-width: 40%;
-  max-height: 40%
-  }
-  }
